@@ -1,13 +1,10 @@
 extern crate sdl2;
 
-use std::fmt;
 use std::path::Path;
-use std::vec::Vec;
 
-use sdl2::rect::Rect;
 use sdl2::render::Renderer;
 use sdl2::render::Texture;
-use sdl2::image::{LoadTexture, INIT_PNG, INIT_JPG};
+use sdl2::image::{LoadTexture};
 
 pub struct Scene{
     bg:Texture,
@@ -34,9 +31,5 @@ impl Scene{
 
     pub fn restart(&mut self){
        
-    }
-
-    fn touch(){
-
     }
 }

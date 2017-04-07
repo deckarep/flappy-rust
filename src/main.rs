@@ -10,7 +10,7 @@ use std::time::Duration;
 use std::thread;
 
 use sdl2::pixels::Color;
-use sdl2::image::{LoadTexture, INIT_PNG, INIT_JPG};
+use sdl2::image::{INIT_PNG, INIT_JPG};
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::rect::Rect;
@@ -20,8 +20,6 @@ use scene::Scene;
 use bird::Bird;
 use pipes::Pipes;
 
-
-// handle the annoying Rect i32
 macro_rules! rect(
     ($x:expr, $y:expr, $w:expr, $h:expr) => (
         Rect::new($x as i32, $y as i32, $w as u32, $h as u32)
@@ -32,7 +30,7 @@ pub fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
 
-    let window = video_subsystem.window("Flappy Bird", 800, 600)
+    let window = video_subsystem.window("Flappy Rust", 800, 600)
         .position_centered()
         .opengl()
         .build()
@@ -54,7 +52,7 @@ pub fn main() {
     thread::sleep(Duration::from_millis(3000));
 
     // Testing a bird
-    let mut scene = Scene::new(&mut renderer);
+    let scene = Scene::new(&mut renderer);
     let mut pipes = Pipes::new(&mut renderer);
     let mut flappy = Bird::new(&mut renderer);
 
@@ -111,10 +109,5 @@ fn draw_title(renderer:&mut Renderer){
 
     renderer.copy(&mut texture, None, Some(rect!(10,10,790,590))).unwrap();
 
-        // Draw the Bird
-    let bird_path = Path::new("res/imgs/bird_frame_1.png");
-    let mut texture = renderer.load_texture(bird_path).unwrap();
-    renderer.copy(&mut texture, None, None).expect("Render failed.");
-    
     renderer.present();
 }

@@ -1,6 +1,5 @@
 extern crate sdl2;
 
-use std::fmt;
 use std::path::Path;
 use std::vec::Vec;
 
@@ -9,7 +8,7 @@ use rand::{thread_rng, Rng};
 use sdl2::rect::Rect;
 use sdl2::render::Renderer;
 use sdl2::render::Texture;
-use sdl2::image::{LoadTexture, INIT_PNG, INIT_JPG};
+use sdl2::image::{LoadTexture};
 
 use bird::Bird;
 
@@ -46,7 +45,7 @@ impl Pipes{
             if p.x+p.w > 0{
                 remaining_pipes.push(p.clone());
             }else{
-                // Add a new pipe
+                // Adds a new pipe when the last one is dead.
                 remaining_pipes.push(Pipe::new());
             }
         }
@@ -78,8 +77,8 @@ impl Clone for Pipe {
 
 impl Pipe{
     pub fn new()->Pipe{
-        
         let mut inverted = false;
+
         // Add some variation.
         if thread_rng().gen_range(0,10) > 5{
             inverted = true;
@@ -107,12 +106,12 @@ impl Pipe{
             flip = true;
         }
 
-        //renderer.copy(texture, None, Some(rect)).expect("Single pipe should have rendered.");
         renderer.copy_ex(texture, None, Some(rect), 0.0, None, false, flip).expect("Single pipe should have rendered.");
     }
-
-    pub fn touch(&self, bird:&Bird){
-        bird.touch(self);
+    
+    pub fn touch(&self, _bird:&Bird){
+        // TODO handle touch code.
+        // bird.touch(self);
     }
 }
 
