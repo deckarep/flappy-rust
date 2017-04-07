@@ -21,7 +21,7 @@ Because I'm home all day after being layed off (along with 70% of the company) o
 * By sticking to one thread, the Rust version needs no synchronization and furthermore, I can guarantee the full correctness of the application thanks to Rust's super advanced compiler. This means, even if I introduced more threads to; for example, generate the pipes similar to Francesc's version...the compiler will absolutely stop me from having data-races by refusing to compile. This means I get to sleep better at night than Francesc.
 * I didn't go out of my way to optimize anything yet and I'm vaguely familiar with SDL2 since most of my work back in the day was with SDL1.
 * Also, before anyone starts complaining about the code...I hacked on this in a fit of rage over a few hours...it was just for fun.
-* Shoutout to Francesc Campoy https://twitter.com/francesc?lang=en a developer advocate on the Go team. Check out his video series Just for Func if you've love Go.
+* Shoutout to Francesc Campoy https://twitter.com/francesc?lang=en a developer advocate on the Go team. Check out his video series Just for Func if you love Go.
 
 
 ## Installation
