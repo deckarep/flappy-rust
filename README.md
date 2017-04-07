@@ -35,6 +35,11 @@ sdl2_image
 sdl2_mixer
 sdl2_gfx
 
+## Running
+```sh
+cargo run #Inside the flappy-rust repo.
+```
+
 ## Images, fonts, and licenses
 
 All the images used in this game are CC0 and obtained from [Clipart](https://openclipart.org/tags/flapping).
