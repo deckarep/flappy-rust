@@ -9,6 +9,7 @@ use sdl2::render::Renderer;
 use sdl2::render::Texture;
 use sdl2::image::{LoadTexture, INIT_PNG, INIT_JPG};
 
+use pipes::Pipe;
 
 const GRAVITY:f64 =  0.2;
 const JUMPSPEED:f64 =  8.0;
@@ -84,7 +85,7 @@ impl Bird{
         self.speed = -JUMPSPEED;
     }
 
-    fn touch(){
+    pub fn touch(&self, pipe:&Pipe){
 
     }
 }

@@ -1,6 +1,9 @@
 extern crate sdl2;
+extern crate rand;
 
-mod bird;
+pub mod bird;
+pub mod scene;
+pub mod pipes;
 
 use std::path::Path;
 use std::time::Duration;
@@ -13,8 +16,9 @@ use sdl2::keyboard::Keycode;
 use sdl2::rect::Rect;
 use sdl2::render::Renderer;
 
+use scene::Scene;
 use bird::Bird;
-
+use pipes::Pipes;
 
 
 // handle the annoying Rect i32
@@ -50,12 +54,17 @@ pub fn main() {
     thread::sleep(Duration::from_millis(5000));
 
     // Testing a bird
+    let mut scene = Scene::new(&mut renderer);
+    let mut pipes = Pipes::new(&mut renderer);
     let mut flappy = Bird::new(&mut renderer);
 
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit{..}  => {
+                    break 'running
+                },
+                Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     break 'running
                 },
                 Event::KeyDown { keycode: Some(Keycode::Space), .. } => {
@@ -67,8 +76,18 @@ pub fn main() {
         // The rest of the game loop goes here...
         thread::sleep(Duration::from_millis(10));
         renderer.clear();
+        
+        // Update and paint scene
+        scene.paint(&mut renderer);
+
+        // Update and paint pipes
+        pipes.update();
+        pipes.paint(&mut renderer);
+
+        // Update paint bird.
         flappy.update();
         flappy.paint(&mut renderer);
+
         renderer.present();
     }
 }

@@ -7,3 +7,6 @@ authors = ["Ralph Caraveo <deckarep@gmail.com>"]
 version = "0.29"
 default-features = false
 features = ["ttf","image","gfx","mixer"]
+
+[dependencies]
+rand = "0.3"
