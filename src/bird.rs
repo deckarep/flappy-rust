@@ -15,8 +15,8 @@ const JUMPSPEED:f64 =  8.0;
 
 pub struct Bird{
     time:i32,
-    x:i32,
-    y:i32,
+    pub x:i32,
+    pub y:i32,
     w:i32,
     h:i32,
     speed:f64,

@@ -4,6 +4,7 @@ extern crate rand;
 pub mod bird;
 pub mod scene;
 pub mod pipes;
+pub mod particles;
 
 use std::path::Path;
 use std::time::Duration;
@@ -19,6 +20,7 @@ use sdl2::render::Renderer;
 use scene::Scene;
 use bird::Bird;
 use pipes::Pipes;
+use particles::Particles;
 
 macro_rules! rect(
     ($x:expr, $y:expr, $w:expr, $h:expr) => (
@@ -55,6 +57,7 @@ pub fn main() {
     let scene = Scene::new(&mut renderer);
     let mut pipes = Pipes::new(&mut renderer);
     let mut flappy = Bird::new(&mut renderer);
+    let mut particles = Particles::new(&mut renderer);
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -67,6 +70,7 @@ pub fn main() {
                 },
                 Event::KeyDown { keycode: Some(Keycode::Space), .. } => {
                     flappy.jump();
+                    particles.reset(flappy.x, flappy.y);
                 }
                 _ => {}
             }
@@ -85,6 +89,10 @@ pub fn main() {
         // Update paint bird.
         flappy.update();
         flappy.paint(&mut renderer);
+
+        // Update particles
+        particles.update();
+        particles.paint(&mut renderer);
 
         renderer.present();
     }
