@@ -32,6 +32,7 @@ impl Bird{
         // Must keep the names around as owned strings.
         let mut frame_names:Vec<String> = Vec::new();
         let mut frame_textures:Vec<Texture> = Vec::new();
+        
         for n in 1..4{
             frame_names.push(format!("res/imgs/bird_frame_{}.png", n));
             let path = Path::new(&frame_names[n-1]);

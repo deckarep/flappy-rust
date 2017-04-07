@@ -24,13 +24,10 @@ impl Scene{
     }
 
     pub fn update(&mut self){
+        // Nothing to do for the background at this point sucka.
     }
 
     pub fn paint(&self, renderer:&mut Renderer){
-        // let rect = Rect::new(10, 600 - self.y - self.h/2, self.w as u32, self.h as u32);
-        // let tex_len = self.textures.len() as i32;
-        // let i = (self.time / 10 % tex_len) as usize;
-
         let mut current_texture = &self.bg;
         renderer.copy(&mut current_texture, None, None).expect("Background should have rendered.");
     }

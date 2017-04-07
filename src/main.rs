@@ -51,7 +51,7 @@ pub fn main() {
     draw_title(&mut renderer);
 
     // sleep 1 second
-    thread::sleep(Duration::from_millis(5000));
+    thread::sleep(Duration::from_millis(3000));
 
     // Testing a bird
     let mut scene = Scene::new(&mut renderer);

@@ -26,7 +26,7 @@ impl Pipes{
         let pipe_texture = renderer.load_texture(path).unwrap();
 
         Pipes{
-            speed:2.0,
+            speed:4.0,
             texture:pipe_texture,
             pipes:vec!(Pipe::new()),
         }
@@ -45,6 +45,9 @@ impl Pipes{
             p.x -= self.speed as i32;
             if p.x+p.w > 0{
                 remaining_pipes.push(p.clone());
+            }else{
+                // Add a new pipe
+                remaining_pipes.push(Pipe::new());
             }
         }
         self.pipes = remaining_pipes;
