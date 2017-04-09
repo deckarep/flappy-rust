@@ -6,12 +6,13 @@ use std::vec::Vec;
 use sdl2::rect::Rect;
 use sdl2::render::Renderer;
 use sdl2::render::Texture;
+use sdl2::render::BlendMode;
 use sdl2::image::{LoadTexture};
 
 use rand::{thread_rng, Rng};
 
 const GRAVITY:f64 =  0.2;
-const NUM_PARTICLES:i32 = 20;
+const NUM_PARTICLES:i32 = 15;
 
 pub struct Particles{
     texture:Texture,
@@ -21,7 +22,8 @@ pub struct Particles{
 impl Particles{
     pub fn new(renderer:&mut Renderer)->Particles{
         let path = Path::new("res/imgs/star.png");
-        let texture = renderer.load_texture(path).unwrap();
+        let mut texture = renderer.load_texture(path).unwrap();
+        texture.set_blend_mode(BlendMode::Add);
 
         let mut pieces:Vec<StarParticle> = Vec::new();
         for _ in 1..NUM_PARTICLES{

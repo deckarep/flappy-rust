@@ -56,7 +56,7 @@ impl Pipes{
         self.pipes = Vec::new();
     }
 
-    pub fn touch(&mut self, bird:&Bird){
+    pub fn touch(&mut self, bird:&mut Bird){
         for p in &self.pipes{
             p.touch(bird);
         }
@@ -65,10 +65,10 @@ impl Pipes{
 
 #[derive(Copy)]
 pub struct Pipe{
-    x:i32,
-    h:i32,
-    w:i32,
-    inverted:bool,
+    pub x:i32,
+    pub h:i32,
+    pub w:i32,
+    pub inverted:bool,
 }
 
 impl Clone for Pipe {
@@ -109,9 +109,8 @@ impl Pipe{
         renderer.copy_ex(texture, None, Some(rect), 0.0, None, false, flip).expect("Single pipe should have rendered.");
     }
     
-    pub fn touch(&self, _bird:&Bird){
-        // TODO handle touch code.
-        // bird.touch(self);
+    pub fn touch(&self, bird:&mut Bird){
+        bird.touch(self);
     }
 }
 

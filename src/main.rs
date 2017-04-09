@@ -6,6 +6,10 @@ pub mod scene;
 pub mod pipes;
 pub mod particles;
 
+#[cfg(target_os = "emscripten")]
+pub mod emscripten;
+
+use std::process;
 use std::path::Path;
 use std::time::Duration;
 use std::thread;
@@ -59,14 +63,14 @@ pub fn main() {
     let mut flappy = Bird::new(&mut renderer);
     let mut particles = Particles::new(&mut renderer);
 
-    'running: loop {
+    let mut main_loop = || {
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit{..}  => {
-                    break 'running
+                    process::exit(0);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
-                    break 'running
+                    process::exit(0);
                 },
                 Event::KeyDown { keycode: Some(Keycode::Space), .. } => {
                     flappy.jump();
@@ -90,12 +94,31 @@ pub fn main() {
         flappy.update();
         flappy.paint(&mut renderer);
 
+        // Check for collisions on bird.
+        pipes.touch(&mut flappy);
+
         // Update particles
         particles.update();
         particles.paint(&mut renderer);
 
+        if flappy.is_dead(){
+            end_game(&mut renderer);
+            thread::sleep(Duration::from_millis(3000));
+            flappy.restart();
+            pipes = Pipes::new(&mut renderer);
+        }
+
         renderer.present();
-    }
+    };
+
+    #[cfg(target_os = "emscripten")]
+    use emscripten::{emscripten};
+
+    #[cfg(target_os = "emscripten")]
+    emscripten::set_main_loop_callback(main_loop);
+
+    #[cfg(not(target_os = "emscripten"))]
+    loop { main_loop(); }
 }
 
 fn draw_title(renderer:&mut Renderer){
@@ -109,6 +132,28 @@ fn draw_title(renderer:&mut Renderer){
 
     // Render the surface
     let surface = font.render("Flappy Rust")
+        .blended(Color::RGBA(255, 87, 0, 255)).unwrap();
+    let mut texture = renderer.create_texture_from_surface(&surface).unwrap();
+
+    renderer.set_draw_color(Color::RGBA(0, 217, 255, 255));
+    renderer.clear();
+
+    renderer.copy(&mut texture, None, Some(rect!(10,10,790,590))).unwrap();
+
+    renderer.present();
+}
+
+fn end_game(renderer:&mut Renderer){
+    renderer.clear();
+    
+    // Load a font
+    let font_path = Path::new("res/fonts/Flappy.ttf");
+    let ttf_context = sdl2::ttf::init().unwrap();
+    let mut font = ttf_context.load_font(font_path, 50).unwrap();
+    font.set_style(sdl2::ttf::STYLE_BOLD);
+
+    // Render the surface
+    let surface = font.render("Game Over!")
         .blended(Color::RGBA(255, 87, 0, 255)).unwrap();
     let mut texture = renderer.create_texture_from_surface(&surface).unwrap();
 

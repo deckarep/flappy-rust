@@ -8,7 +8,7 @@ use sdl2::render::Renderer;
 use sdl2::render::Texture;
 use sdl2::image::{LoadTexture};
 
-//use pipes::Pipe;
+use pipes::Pipe;
 
 const GRAVITY:f64 =  0.2;
 const JUMPSPEED:f64 =  8.0;
@@ -85,9 +85,21 @@ impl Bird{
         self.speed = -JUMPSPEED;
     }
 
-    /*
-    pub fn touch(&self, pipe:&Pipe){
-        // TODO
+    pub fn touch(&mut self, p:&Pipe){
+        
+        if p.x > self.x+self.w { // too far right
+		    return
+	    }
+	    if p.x+p.w < self.x { // too far left
+		    return
+	    }
+	    if !p.inverted && p.h < self.y-self.h/2 { // pipe is too low
+		    return
+    	}
+	    if p.inverted && 600-p.h > self.y+self.h/2 { // inverted pipe is too high
+		    return
+	    }
+
+	    self.dead = true
     }
-    */
 }
