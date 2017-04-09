@@ -36,13 +36,14 @@ pub fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
 
-    let window = video_subsystem.window("Flappy Rust", 800, 600)
+    let window = video_subsystem
+        .window("Flappy Rust", 800, 600)
         .position_centered()
         .opengl()
         .build()
         .unwrap();
 
-    let _image_context = sdl2::image::init(INIT_PNG | INIT_JPG).unwrap();    
+    let _image_context = sdl2::image::init(INIT_PNG | INIT_JPG).unwrap();
 
     let mut renderer = window.renderer().build().unwrap();
 
@@ -66,12 +67,12 @@ pub fn main() {
     let mut main_loop = || {
         for event in event_pump.poll_iter() {
             match event {
-                Event::Quit{..}  => {
+                Event::Quit { .. } => {
                     process::exit(0);
-                },
+                }
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     process::exit(0);
-                },
+                }
                 Event::KeyDown { keycode: Some(Keycode::Space), .. } => {
                     flappy.jump();
                     particles.reset(flappy.x, flappy.y);
@@ -82,7 +83,7 @@ pub fn main() {
         // The rest of the game loop goes here...
         thread::sleep(Duration::from_millis(10));
         renderer.clear();
-        
+
         // Update and paint scene
         scene.paint(&mut renderer);
 
@@ -101,7 +102,7 @@ pub fn main() {
         particles.update();
         particles.paint(&mut renderer);
 
-        if flappy.is_dead(){
+        if flappy.is_dead() {
             end_game(&mut renderer);
             thread::sleep(Duration::from_millis(3000));
             flappy.restart();
@@ -112,18 +113,20 @@ pub fn main() {
     };
 
     #[cfg(target_os = "emscripten")]
-    use emscripten::{emscripten};
+    use emscripten::emscripten;
 
     #[cfg(target_os = "emscripten")]
     emscripten::set_main_loop_callback(main_loop);
 
     #[cfg(not(target_os = "emscripten"))]
-    loop { main_loop(); }
+    loop {
+        main_loop();
+    }
 }
 
-fn draw_title(renderer:&mut Renderer){
+fn draw_title(renderer: &mut Renderer) {
     renderer.clear();
-    
+
     // Load a font
     let font_path = Path::new("res/fonts/Flappy.ttf");
     let ttf_context = sdl2::ttf::init().unwrap();
@@ -132,20 +135,23 @@ fn draw_title(renderer:&mut Renderer){
 
     // Render the surface
     let surface = font.render("Flappy Rust")
-        .blended(Color::RGBA(255, 87, 0, 255)).unwrap();
+        .blended(Color::RGBA(255, 87, 0, 255))
+        .unwrap();
     let mut texture = renderer.create_texture_from_surface(&surface).unwrap();
 
     renderer.set_draw_color(Color::RGBA(0, 217, 255, 255));
     renderer.clear();
 
-    renderer.copy(&mut texture, None, Some(rect!(10,10,790,590))).unwrap();
+    renderer
+        .copy(&mut texture, None, Some(rect!(10, 10, 790, 590)))
+        .unwrap();
 
     renderer.present();
 }
 
-fn end_game(renderer:&mut Renderer){
+fn end_game(renderer: &mut Renderer) {
     renderer.clear();
-    
+
     // Load a font
     let font_path = Path::new("res/fonts/Flappy.ttf");
     let ttf_context = sdl2::ttf::init().unwrap();
@@ -154,13 +160,16 @@ fn end_game(renderer:&mut Renderer){
 
     // Render the surface
     let surface = font.render("Game Over!")
-        .blended(Color::RGBA(255, 87, 0, 255)).unwrap();
+        .blended(Color::RGBA(255, 87, 0, 255))
+        .unwrap();
     let mut texture = renderer.create_texture_from_surface(&surface).unwrap();
 
     renderer.set_draw_color(Color::RGBA(0, 217, 255, 255));
     renderer.clear();
 
-    renderer.copy(&mut texture, None, Some(rect!(10,10,790,590))).unwrap();
+    renderer
+        .copy(&mut texture, None, Some(rect!(10, 10, 790, 590)))
+        .unwrap();
 
     renderer.present();
 }
