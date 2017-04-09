@@ -35,6 +35,12 @@ sdl2_image
 sdl2_mixer
 sdl2_gfx
 
+On OSX:
+```
+brew install sdl2_mixer --with-flac --with-fluid-synth --with-libmikmod
+--with-libmodplug --with-libvorbis --with-smpeg2
+```
+
 ## Running
 ```sh
 cargo run #Inside the flappy-rust repo.
