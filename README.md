@@ -14,7 +14,7 @@ Because I'm home all day after being layed off (along with 70% of the company) o
 
 # Thoughts on the Go version vs the Rust version
 
-* The Rust version is not quite complete...it doesn't yet have collision detection on the pipes
+* This version's collision detection is complete and has particle effects.
 * Also, I cheated a bit (due to lazy-ness) and simplifed the Scene object and event loop.
 * I also pulled this version off in a single OS thread, no need to add mutexes like Francesc's version.
 * The Go version needs it's main goroutine pinned to an OS thread because Go's runtime is allowed to move goroutines to different threads.  If this wasn't done then you'd have the SDL2 event-loop trying to mutate state while Go's runtime mutates state on a competing thread. For more information watch Francesc's video series called `Just for Func` where he mentions why this is important: https://www.youtube.com/channel/UC_BzFbxG2za3bp5NRRRXJSw
