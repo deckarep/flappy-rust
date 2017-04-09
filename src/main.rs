@@ -20,6 +20,7 @@ use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::rect::Rect;
 use sdl2::render::Renderer;
+use sdl2::mixer::{INIT_OGG, AUDIO_S16LSB};
 
 use scene::Scene;
 use bird::Bird;
@@ -34,7 +35,18 @@ macro_rules! rect(
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
+    let _audio = sdl_context.audio().unwrap();
+    let _mixer_context = sdl2::mixer::init(INIT_OGG).unwrap();
+    let music = sdl2::mixer::Music::from_file(Path::new("res/audio/soundtrack.ogg")).unwrap();
     let video_subsystem = sdl_context.video().unwrap();
+
+    let frequency = 44100;
+    let format = AUDIO_S16LSB; // signed 16 bit samples, in little-endian byte order
+    let channels = 2; // Stereo
+    //let chunk_size = 1024;
+    let chunk_size = 512;
+    let _ = sdl2::mixer::open_audio(frequency, format, channels, chunk_size).unwrap();
+    sdl2::mixer::allocate_channels(0);
 
     let window = video_subsystem
         .window("Flappy Rust", 800, 600)
@@ -63,6 +75,8 @@ pub fn main() {
     let mut pipes = Pipes::new(&mut renderer);
     let mut flappy = Bird::new(&mut renderer);
     let mut particles = Particles::new(&mut renderer);
+
+    music.play(1);
 
     let mut main_loop = || {
         for event in event_pump.poll_iter() {
