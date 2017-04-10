@@ -77,6 +77,8 @@ pub fn main() {
 
     let _ = music.play(1);
 
+    let mut game_paused = false;
+
     let mut main_loop = || {
         for event in event_pump.poll_iter() {
             match event {
@@ -90,39 +92,47 @@ pub fn main() {
                     flappy.jump();
                     particles.reset(flappy.x, flappy.y);
                 }
+                Event::KeyDown { keycode: Some(Keycode::P), .. } => {
+                    game_paused = !game_paused;
+                }
                 _ => {}
             }
         }
-        // The rest of the game loop goes here...
-        thread::sleep(Duration::from_millis(10));
-        renderer.clear();
 
-        // Update and paint scene
-        scene.paint(&mut renderer);
+        // Don't update game state when paused.
+        if !game_paused {
 
-        // Update and paint pipes
-        pipes.update();
-        pipes.paint(&mut renderer);
+            // The rest of the game loop goes here...
+            thread::sleep(Duration::from_millis(10));
+            renderer.clear();
 
-        // Update paint bird.
-        flappy.update();
-        flappy.paint(&mut renderer);
+            // Update and paint scene
+            scene.paint(&mut renderer);
 
-        // Check for collisions on bird.
-        pipes.touch(&mut flappy);
+            // Update and paint pipes
+            pipes.update();
+            pipes.paint(&mut renderer);
 
-        // Update particles
-        particles.update();
-        particles.paint(&mut renderer);
+            // Update paint bird.
+            flappy.update();
+            flappy.paint(&mut renderer);
 
-        if flappy.is_dead() {
-            draw_title("Game Over", &mut renderer);
-            thread::sleep(Duration::from_millis(3000));
-            flappy.restart();
-            pipes = Pipes::new(&mut renderer);
+            // Check for collisions on bird.
+            pipes.touch(&mut flappy);
+
+            // Update particles
+            particles.update();
+            particles.paint(&mut renderer);
+
+            if flappy.is_dead() {
+                draw_title("Game Over", &mut renderer);
+                thread::sleep(Duration::from_millis(3000));
+                flappy.restart();
+                pipes = Pipes::new(&mut renderer);
+            }
+
+            renderer.present();
         }
-
-        renderer.present();
     };
 
     #[cfg(target_os = "emscripten")]
