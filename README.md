@@ -10,7 +10,7 @@ Because I'm home all day after being layed off (along with 70% of the company) o
 
 # Screen Capture from OSX
 
-![Flappy Rust](https://github.com/deckarep/flappy-rust/raw/master/screenshot.gif)
+![Flappy Rust](https://github.com/deckarep/flappy-rust/raw/master/screenshot.png)
 
 # Features
 
