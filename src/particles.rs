@@ -64,19 +64,13 @@ impl Particles {
     }
 }
 
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct StarParticle {
     x: i32,
     xvel: i32,
     y: i32,
     dead: bool,
     speed: f64,
-}
-
-impl Clone for StarParticle {
-    fn clone(&self) -> StarParticle {
-        *self
-    }
 }
 
 impl StarParticle {

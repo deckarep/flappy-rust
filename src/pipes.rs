@@ -63,18 +63,12 @@ impl Pipes {
     }
 }
 
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct Pipe {
     pub x: i32,
     pub h: i32,
     pub w: i32,
     pub inverted: bool,
-}
-
-impl Clone for Pipe {
-    fn clone(&self) -> Pipe {
-        *self
-    }
 }
 
 impl Pipe {
