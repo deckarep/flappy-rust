@@ -75,7 +75,7 @@ pub fn main() {
     let mut flappy = Bird::new(&mut renderer);
     let mut particles = Particles::new(&mut renderer);
 
-    music.play(1);
+    let _ = music.play(1);
 
     let mut main_loop = || {
         for event in event_pump.poll_iter() {

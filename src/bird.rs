@@ -71,8 +71,17 @@ impl Bird {
         let i = (self.time / 10 % tex_len) as usize;
 
         let mut current_texture = &self.textures[i];
+
+        // Gives the bird a cool bouncing effect based on his speed.
+        let degrees = (self.speed % 360.0) * 5.0;
         renderer
-            .copy(&mut current_texture, None, Some(rect))
+            .copy_ex(&mut current_texture,
+                     None,
+                     Some(rect),
+                     degrees,
+                     None,
+                     false,
+                     false)
             .expect("Bird should have rendered.");
     }
 
