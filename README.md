@@ -12,6 +12,14 @@ Because I'm home all day after being layed off (along with 70% of the company) o
 
 ![Flappy Rust](https://github.com/deckarep/flappy-rust/raw/master/screenshot.gif)
 
+# Features
+
+* Music soundtrack
+* The game can be paused by pressing `P`
+* The bird bounces when jumping based on his vertical gravity and speed.
+* Particle effects with additive blending
+* All new background graphics.
+
 # Thoughts on the Go version vs the Rust version
 
 * This version's collision detection is complete and has particle effects.
