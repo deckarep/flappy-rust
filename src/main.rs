@@ -64,7 +64,7 @@ pub fn main() {
     let mut event_pump = sdl_context.event_pump().unwrap();
 
     // draw_title: Flappy Rust
-    draw_title(&mut renderer);
+    draw_title("Flappy Bird", &mut renderer);
 
     // sleep 1 second
     thread::sleep(Duration::from_millis(3000));
@@ -116,7 +116,7 @@ pub fn main() {
         particles.paint(&mut renderer);
 
         if flappy.is_dead() {
-            end_game(&mut renderer);
+            draw_title("Game Over", &mut renderer);
             thread::sleep(Duration::from_millis(3000));
             flappy.restart();
             pipes = Pipes::new(&mut renderer);
@@ -137,7 +137,7 @@ pub fn main() {
     }
 }
 
-fn draw_title(renderer: &mut Renderer) {
+fn draw_title(title: &str, renderer: &mut Renderer) {
     renderer.clear();
 
     // Load a font
@@ -147,32 +147,7 @@ fn draw_title(renderer: &mut Renderer) {
     font.set_style(sdl2::ttf::STYLE_BOLD);
 
     // Render the surface
-    let surface = font.render("Flappy Rust")
-        .blended(Color::RGBA(255, 87, 0, 255))
-        .unwrap();
-    let mut texture = renderer.create_texture_from_surface(&surface).unwrap();
-
-    renderer.set_draw_color(Color::RGBA(0, 217, 255, 255));
-    renderer.clear();
-
-    renderer
-        .copy(&mut texture, None, Some(rect!(10, 10, 790, 590)))
-        .unwrap();
-
-    renderer.present();
-}
-
-fn end_game(renderer: &mut Renderer) {
-    renderer.clear();
-
-    // Load a font
-    let font_path = Path::new("res/fonts/Flappy.ttf");
-    let ttf_context = sdl2::ttf::init().unwrap();
-    let mut font = ttf_context.load_font(font_path, 50).unwrap();
-    font.set_style(sdl2::ttf::STYLE_BOLD);
-
-    // Render the surface
-    let surface = font.render("Game Over!")
+    let surface = font.render(title)
         .blended(Color::RGBA(255, 87, 0, 255))
         .unwrap();
     let mut texture = renderer.create_texture_from_surface(&surface).unwrap();
