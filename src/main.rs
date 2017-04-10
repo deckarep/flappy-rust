@@ -70,7 +70,7 @@ pub fn main() {
     thread::sleep(Duration::from_millis(3000));
 
     // Testing a bird
-    let scene = Scene::new(&mut renderer);
+    let mut scene = Scene::new(&mut renderer);
     let mut pipes = Pipes::new(&mut renderer);
     let mut flappy = Bird::new(&mut renderer);
     let mut particles = Particles::new(&mut renderer);
@@ -107,6 +107,7 @@ pub fn main() {
             renderer.clear();
 
             // Update and paint scene
+            scene.update();
             scene.paint(&mut renderer);
 
             // Update and paint pipes
