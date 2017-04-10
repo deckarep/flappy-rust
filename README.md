@@ -2,15 +2,13 @@
 
 Flappy Rust is a *mostly* complete clone of Flappy Gopher which is a clone of the famous Flappy Bird game developed in Rust with bindings for SDL2.
 
+![Flappy Rust](https://github.com/deckarep/flappy-rust/raw/master/screenshot.png)
+
 This repo was built significantly faster by referencing Francesc Campoy's version originally based in Go: https://github.com/campoy/flappy-gopher
 
 # Why did you write a clone of a clone?
 
 Because I'm home all day after being layed off (along with 70% of the company) on Monday 4/3/2017 and decided to write some code in Rust since it's been on my TODO list AND because I need an outlet for my negative energy.
-
-# Screen Capture from OSX
-
-![Flappy Rust](https://github.com/deckarep/flappy-rust/raw/master/screenshot.png)
 
 # Features
 
