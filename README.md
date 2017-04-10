@@ -17,6 +17,7 @@ Because I'm home all day after being layed off (along with 70% of the company) o
 * The bird bounces when jumping based on his vertical gravity and speed.
 * Particle effects with additive blending
 * All new background graphics.
+* Work begun to add parallax scrolling.
 
 # Thoughts on the Go version vs the Rust version
 
