@@ -3,6 +3,7 @@ extern crate sdl2;
 use std::path::Path;
 use std::vec::Vec;
 use std::rc::Rc;
+use rand::{thread_rng, Rng};
 
 use sdl2::rect::Rect;
 use sdl2::render::Renderer;
@@ -10,7 +11,7 @@ use sdl2::render::Texture;
 use sdl2::render::BlendMode;
 use sdl2::image::LoadTexture;
 
-use rand::{thread_rng, Rng};
+use display::Displayable;
 
 const GRAVITY: f64 = 0.2;
 const NUM_PARTICLES: i32 = 15;
@@ -47,21 +48,22 @@ impl Particles {
 
         self.particles = pieces;
     }
+}
 
-    pub fn update(&mut self) {
+impl Displayable for Particles{
+    fn update(&mut self) {
         for p in &mut self.particles {
             p.update();
         }
     }
 
-    pub fn paint(&self, renderer: &mut Renderer) {
+    fn paint(&self, renderer: &mut Renderer) {
         for p in &self.particles {
             p.paint(renderer);
         }
     }
 }
 
-//#[derive(Clone, Copy)]
 pub struct StarParticle {
     x: i32,
     xvel: i32,
@@ -90,8 +92,10 @@ impl StarParticle {
         self.dead = false;
         self.speed = thread_rng().gen_range(1, 5) as f64;
     }
+}
 
-    pub fn update(&mut self) {
+impl Displayable for StarParticle{
+    fn update(&mut self) {
         self.x += self.xvel;
         self.y += self.speed as i32;
         if self.y < 0 {
@@ -100,7 +104,7 @@ impl StarParticle {
         self.speed += GRAVITY;
     }
 
-    pub fn paint(&self, renderer: &mut Renderer) {
+    fn paint(&self, renderer: &mut Renderer) {
         let rect = Rect::new(self.x, self.y, 20, 20);
         renderer
             .copy_ex(&self.texture, None, Some(rect), 0.0, None, false, false)
