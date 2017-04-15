@@ -9,6 +9,7 @@ use sdl2::render::Texture;
 use sdl2::image::LoadTexture;
 
 use pipes::Pipe;
+use display::Displayable;
 
 const GRAVITY: f64 = 0.2;
 const JUMPSPEED: f64 = 8.0;
@@ -53,38 +54,6 @@ impl Bird {
         }
     }
 
-    pub fn update(&mut self) {
-        self.time += 1;
-        self.y -= self.speed as i32;
-        if self.y < 0 {
-            self.dead = true;
-        }
-        self.speed += GRAVITY;
-    }
-
-    pub fn paint(&self, renderer: &mut Renderer) {
-        let rect = Rect::new(self.x,
-                             600 - self.y - self.h / 2,
-                             self.w as u32,
-                             self.h as u32);
-        let tex_len = self.textures.len() as i32;
-        let i = (self.time / 10 % tex_len) as usize;
-
-        let mut current_texture = &self.textures[i];
-
-        // Gives the bird a cool bouncing effect based on his speed.
-        let degrees = (self.speed % 360.0) * 5.0;
-        renderer
-            .copy_ex(&mut current_texture,
-                     None,
-                     Some(rect),
-                     degrees,
-                     None,
-                     false,
-                     false)
-            .expect("Bird should have rendered.");
-    }
-
     pub fn restart(&mut self) {
         self.y = 300;
         self.speed = 0.0;
@@ -119,5 +88,39 @@ impl Bird {
         }
 
         self.dead = true
+    }
+}
+
+impl Displayable for Bird{
+    fn update(&mut self) {
+        self.time += 1;
+        self.y -= self.speed as i32;
+        if self.y < 0 {
+            self.dead = true;
+        }
+        self.speed += GRAVITY;
+    }
+
+    fn paint(&self, renderer: &mut Renderer) {
+        let rect = Rect::new(self.x,
+                             600 - self.y - self.h / 2,
+                             self.w as u32,
+                             self.h as u32);
+        let tex_len = self.textures.len() as i32;
+        let i = (self.time / 10 % tex_len) as usize;
+
+        let mut current_texture = &self.textures[i];
+
+        // Gives the bird a cool bouncing effect based on his speed.
+        let degrees = (self.speed % 360.0) * 5.0;
+        renderer
+            .copy_ex(&mut current_texture,
+                     None,
+                     Some(rect),
+                     degrees,
+                     None,
+                     false,
+                     false)
+            .expect("Bird should have rendered.");
     }
 }

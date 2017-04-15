@@ -11,6 +11,7 @@ use sdl2::render::Texture;
 use sdl2::image::LoadTexture;
 
 use bird::Bird;
+use display::Displayable;
 
 pub struct Pipes {
     speed: f64,
@@ -31,14 +32,19 @@ impl Pipes {
         }
     }
 
-    pub fn paint(&self, renderer: &mut Renderer) {
-        let current_texture = &self.texture;
-        for p in &self.pipes {
-            p.paint(renderer, current_texture);
-        }
+    pub fn restart(&mut self) {
+        self.pipes = Vec::new();
     }
 
-    pub fn update(&mut self) {
+    pub fn touch(&mut self, bird: &mut Bird) {
+        for p in &self.pipes {
+            p.touch(bird);
+        }
+    }
+}
+
+impl Displayable for Pipes {
+     fn update(&mut self) {
         let mut remaining_pipes: Vec<Pipe> = Vec::new();
         for p in &mut self.pipes {
             p.x -= self.speed as i32;
@@ -52,13 +58,10 @@ impl Pipes {
         self.pipes = remaining_pipes;
     }
 
-    pub fn restart(&mut self) {
-        self.pipes = Vec::new();
-    }
-
-    pub fn touch(&mut self, bird: &mut Bird) {
+    fn paint(&self, renderer: &mut Renderer) {
+        let current_texture = &self.texture;
         for p in &self.pipes {
-            p.touch(bird);
+            p.paint(renderer, current_texture);
         }
     }
 }
@@ -70,6 +73,7 @@ pub struct Pipe {
     pub w: i32,
     pub inverted: bool,
 }
+
 
 impl Pipe {
     pub fn new() -> Pipe {

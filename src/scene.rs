@@ -7,6 +7,8 @@ use sdl2::render::Renderer;
 use sdl2::render::Texture;
 use sdl2::image::LoadTexture;
 
+use display::Displayable;
+
 pub struct Scene {
     layer0: Texture,
     layer1: Texture,
@@ -15,7 +17,6 @@ pub struct Scene {
     layer3_x:i32,layer3_x2:i32,
     layer4: Texture,
     layer4_x:i32,layer4_x2:i32,
-    
 }
 
 // TODO: refactor this code since it's all copy pasta...but scrolling now works!
@@ -44,7 +45,11 @@ impl Scene {
         }
     }
 
-    pub fn update(&mut self) {
+    pub fn restart(&mut self) {}
+}
+
+impl Displayable for Scene {
+    fn update(&mut self) {
         // Nothing to do for the background at this point sucka.
         self.layer3_x -=1;
         self.layer3_x2 -=1;
@@ -67,7 +72,7 @@ impl Scene {
         }
     }
 
-    pub fn paint(&self, renderer: &mut Renderer) {
+    fn paint(&self, renderer: &mut Renderer) {
         let mut current_texture = &self.layer0;
         renderer
             .copy(&mut current_texture, None, None)
@@ -119,6 +124,4 @@ impl Scene {
             .copy(&mut current_texture, None, Some(rect))
             .expect("Layer4 should have rendered.");
     }
-
-    pub fn restart(&mut self) {}
 }

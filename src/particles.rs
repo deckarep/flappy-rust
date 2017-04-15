@@ -2,6 +2,7 @@ extern crate sdl2;
 
 use std::path::Path;
 use std::vec::Vec;
+use std::rc::Rc;
 
 use sdl2::rect::Rect;
 use sdl2::render::Renderer;
@@ -15,7 +16,7 @@ const GRAVITY: f64 = 0.2;
 const NUM_PARTICLES: i32 = 15;
 
 pub struct Particles {
-    texture: Texture,
+    texture: Rc<Texture>,
     particles: Vec<StarParticle>,
 }
 
@@ -25,13 +26,15 @@ impl Particles {
         let mut texture = renderer.load_texture(path).unwrap();
         texture.set_blend_mode(BlendMode::Add);
 
+        let rc_texture = Rc::new(texture);
+
         let mut pieces: Vec<StarParticle> = Vec::new();
         for _ in 1..NUM_PARTICLES {
-            pieces.push(StarParticle::new(30, 300))
+            pieces.push(StarParticle::new(rc_texture.clone(), 30, 300))
         }
 
         Particles {
-            texture: texture,
+            texture: rc_texture,
             particles: pieces,
         }
     }
@@ -39,48 +42,44 @@ impl Particles {
     pub fn reset(&mut self, start_x: i32, start_y: i32) {
         let mut pieces: Vec<StarParticle> = Vec::new();
         for _ in 1..NUM_PARTICLES {
-            pieces.push(StarParticle::new(start_x, 600 - start_y))
+            pieces.push(StarParticle::new(self.texture.clone(), start_x, 600 - start_y))
         }
 
         self.particles = pieces;
     }
 
     pub fn update(&mut self) {
-        let mut remaining_particles: Vec<StarParticle> = Vec::new();
         for p in &mut self.particles {
             p.update();
-            if !p.dead {
-                remaining_particles.push(p.clone());
-            }
         }
-        self.particles = remaining_particles;
     }
 
     pub fn paint(&self, renderer: &mut Renderer) {
-        let current_texture = &self.texture;
         for p in &self.particles {
-            p.paint(renderer, current_texture);
+            p.paint(renderer);
         }
     }
 }
 
-#[derive(Clone, Copy)]
+//#[derive(Clone, Copy)]
 pub struct StarParticle {
     x: i32,
     xvel: i32,
     y: i32,
     dead: bool,
     speed: f64,
+    texture: Rc<Texture>,
 }
 
 impl StarParticle {
-    pub fn new(start_x: i32, start_y: i32) -> StarParticle {
+    pub fn new(texture:Rc<Texture>, start_x: i32, start_y: i32) -> StarParticle {
         StarParticle {
             x: start_x + thread_rng().gen_range(-15, 15),
             y: start_y + thread_rng().gen_range(-5, 5),
             xvel: thread_rng().gen_range(-5, 5),
             dead: false,
             speed: thread_rng().gen_range(1, 4) as f64,
+            texture: texture,
         }
     }
 
@@ -101,10 +100,10 @@ impl StarParticle {
         self.speed += GRAVITY;
     }
 
-    pub fn paint(&self, renderer: &mut Renderer, texture: &Texture) {
+    pub fn paint(&self, renderer: &mut Renderer) {
         let rect = Rect::new(self.x, self.y, 20, 20);
         renderer
-            .copy_ex(texture, None, Some(rect), 0.0, None, false, false)
+            .copy_ex(&self.texture, None, Some(rect), 0.0, None, false, false)
             .expect("Single star particle should have rendered.");
     }
 }

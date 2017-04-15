@@ -5,6 +5,7 @@ pub mod bird;
 pub mod scene;
 pub mod pipes;
 pub mod particles;
+pub mod display;
 
 #[cfg(target_os = "emscripten")]
 pub mod emscripten;
@@ -26,6 +27,7 @@ use scene::Scene;
 use bird::Bird;
 use pipes::Pipes;
 use particles::Particles;
+use display::Displayable;
 
 macro_rules! rect(
     ($x:expr, $y:expr, $w:expr, $h:expr) => (
