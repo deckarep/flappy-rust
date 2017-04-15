@@ -44,7 +44,7 @@ impl Pipes {
 }
 
 impl Displayable for Pipes {
-     fn update(&mut self) {
+    fn update(&mut self) {
         let mut remaining_pipes: Vec<Pipe> = Vec::new();
         for p in &mut self.pipes {
             p.x -= self.speed as i32;

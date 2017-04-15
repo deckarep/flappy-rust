@@ -50,7 +50,7 @@ impl Particles {
     }
 }
 
-impl Displayable for Particles{
+impl Displayable for Particles {
     fn update(&mut self) {
         for p in &mut self.particles {
             p.update();
@@ -74,7 +74,7 @@ pub struct StarParticle {
 }
 
 impl StarParticle {
-    pub fn new(texture:Rc<Texture>, start_x: i32, start_y: i32) -> StarParticle {
+    pub fn new(texture: Rc<Texture>, start_x: i32, start_y: i32) -> StarParticle {
         StarParticle {
             x: start_x + thread_rng().gen_range(-15, 15),
             y: start_y + thread_rng().gen_range(-5, 5),
@@ -94,7 +94,7 @@ impl StarParticle {
     }
 }
 
-impl Displayable for StarParticle{
+impl Displayable for StarParticle {
     fn update(&mut self) {
         self.x += self.xvel;
         self.y += self.speed as i32;

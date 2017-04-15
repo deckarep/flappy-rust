@@ -91,7 +91,7 @@ impl Bird {
     }
 }
 
-impl Displayable for Bird{
+impl Displayable for Bird {
     fn update(&mut self) {
         self.time += 1;
         self.y -= self.speed as i32;

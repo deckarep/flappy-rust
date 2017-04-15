@@ -14,9 +14,11 @@ pub struct Scene {
     layer1: Texture,
     layer2: Texture,
     layer3: Texture,
-    layer3_x:i32,layer3_x2:i32,
+    layer3_x: i32,
+    layer3_x2: i32,
     layer4: Texture,
-    layer4_x:i32,layer4_x2:i32,
+    layer4_x: i32,
+    layer4_x2: i32,
 }
 
 // TODO: refactor this code since it's all copy pasta...but scrolling now works!
@@ -35,13 +37,13 @@ impl Scene {
             layer3: renderer
                 .load_texture(Path::new("res/imgs/layer_04_1920 x 1080.png"))
                 .unwrap(),
-            layer3_x:0,
-            layer3_x2:800,
+            layer3_x: 0,
+            layer3_x2: 800,
             layer4: renderer
                 .load_texture(Path::new("res/imgs/layer_05_1920 x 1080.png"))
                 .unwrap(),
-            layer4_x:0,
-            layer4_x2:800,
+            layer4_x: 0,
+            layer4_x2: 800,
         }
     }
 
@@ -51,24 +53,24 @@ impl Scene {
 impl Displayable for Scene {
     fn update(&mut self) {
         // Nothing to do for the background at this point sucka.
-        self.layer3_x -=1;
-        self.layer3_x2 -=1;
+        self.layer3_x -= 1;
+        self.layer3_x2 -= 1;
 
-        if self.layer3_x < -800{
+        if self.layer3_x < -800 {
             self.layer3_x = 800;
         }
-        if self.layer3_x2 < -800{
+        if self.layer3_x2 < -800 {
             self.layer3_x2 = 800;
         }
 
-        self.layer4_x -=1;
-        self.layer4_x2 -=1;
+        self.layer4_x -= 1;
+        self.layer4_x2 -= 1;
 
-        if self.layer4_x < -800{
+        if self.layer4_x < -800 {
             self.layer4_x = 800;
         }
-        if self.layer4_x2 < -800{
-            self.layer4_x2 = self.layer4_x+800-2;
+        if self.layer4_x2 < -800 {
+            self.layer4_x2 = self.layer4_x + 800 - 2;
         }
     }
 
@@ -88,37 +90,25 @@ impl Displayable for Scene {
             .copy(&mut current_texture, None, None)
             .expect("Layer2 should have rendered.");
 
-        let rect = Rect::new(self.layer3_x,
-                             0,
-                             800,
-                             600);
+        let rect = Rect::new(self.layer3_x, 0, 800, 600);
         let mut current_texture = &self.layer3;
         renderer
             .copy(&mut current_texture, None, Some(rect))
             .expect("Layer3 should have rendered.");
 
-        let rect = Rect::new(self.layer3_x2,
-                             0,
-                             800,
-                             600);
+        let rect = Rect::new(self.layer3_x2, 0, 800, 600);
         let mut current_texture = &self.layer3;
         renderer
             .copy(&mut current_texture, None, Some(rect))
-            .expect("Layer3 should have rendered.");    
+            .expect("Layer3 should have rendered.");
 
-        let rect = Rect::new(self.layer4_x,
-                             0,
-                             800,
-                             600);
+        let rect = Rect::new(self.layer4_x, 0, 800, 600);
         let mut current_texture = &self.layer4;
         renderer
             .copy(&mut current_texture, None, Some(rect))
             .expect("Layer4 should have rendered.");
 
-        let rect = Rect::new(self.layer4_x2,
-                             0,
-                             800,
-                             600);
+        let rect = Rect::new(self.layer4_x2, 0, 800, 600);
         let mut current_texture = &self.layer4;
         renderer
             .copy(&mut current_texture, None, Some(rect))
