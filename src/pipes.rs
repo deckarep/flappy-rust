@@ -20,7 +20,7 @@ pub struct Pipes {
 }
 
 impl Pipes {
-    pub fn new(renderer: &mut Renderer) -> Pipes {
+    pub fn new(renderer: &Renderer) -> Pipes {
         // Must keep the names around as owned strings.
         let path = Path::new("res/imgs/pipe.png");
         let pipe_texture = renderer.load_texture(path).unwrap();

@@ -24,9 +24,6 @@ use sdl2::render::Renderer;
 use sdl2::mixer::{INIT_OGG, AUDIO_S16LSB};
 
 use scene::Scene;
-use bird::Bird;
-use pipes::Pipes;
-use particles::Particles;
 use display::Displayable;
 
 macro_rules! rect(
@@ -73,9 +70,8 @@ pub fn main() {
 
     // Testing a bird
     let mut scene = Scene::new(&mut renderer);
-    let mut pipes = Pipes::new(&mut renderer);
-    let mut flappy = Bird::new(&mut renderer);
-    let mut particles = Particles::new(&mut renderer);
+    //scene.add_child(Box::new(Pipes::new(&mut renderer)));
+    //scene.add_child(Box::new(Particles::new(&mut renderer)));
 
     let _ = music.play(1);
 
@@ -90,52 +86,55 @@ pub fn main() {
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     process::exit(0);
                 }
-                Event::KeyDown { keycode: Some(Keycode::Space), .. } => {
-                    flappy.jump();
-                    particles.reset(flappy.x, flappy.y);
+                // Forwards key events to the scene manager.
+                Event::KeyDown { .. } => {
+                    scene.on_key_down(&event);
                 }
-                Event::KeyDown { keycode: Some(Keycode::P), .. } => {
-                    game_paused = !game_paused;
+                Event::KeyUp { .. } => {
+                    scene.on_key_up(&event);
                 }
+                // Event::KeyDown { keycode: Some(Keycode::P), .. } => {
+                //     game_paused = !game_paused;
+                // }
+                // Event::KeyDown { keycode: Some(Keycode::Space), .. } => {
+                //     //flappy.jump();
+                //     //particles.reset(flappy.x, flappy.y);
+                // }
                 _ => {}
             }
         }
 
-        // Don't update game state when paused.
-        if !game_paused {
+        // The rest of the game loop goes here...
+        thread::sleep(Duration::from_millis(10));
+        renderer.clear();
 
-            // The rest of the game loop goes here...
-            thread::sleep(Duration::from_millis(10));
-            renderer.clear();
+        // Update and paint scene
+        scene.update();
+        scene.paint(&mut renderer);
 
-            // Update and paint scene
-            scene.update();
-            scene.paint(&mut renderer);
+        // // Update and paint pipes
+        // pipes.update();
+        // pipes.paint(&mut renderer);
 
-            // Update and paint pipes
-            pipes.update();
-            pipes.paint(&mut renderer);
+        // // Update paint bird.
+        // flappy.update();
+        // flappy.paint(&mut renderer);
 
-            // Update paint bird.
-            flappy.update();
-            flappy.paint(&mut renderer);
+        // // Check for collisions on bird.
+        // pipes.touch(&mut flappy);
 
-            // Check for collisions on bird.
-            pipes.touch(&mut flappy);
+        // // Update particles
+        // particles.update();
+        // particles.paint(&mut renderer);
 
-            // Update particles
-            particles.update();
-            particles.paint(&mut renderer);
+        // if flappy.is_dead() {
+        //     draw_title("Game Over", &mut renderer);
+        //     thread::sleep(Duration::from_millis(3000));
+        //     flappy.restart();
+        //     pipes = Pipes::new(&mut renderer);
+        // }
 
-            if flappy.is_dead() {
-                draw_title("Game Over", &mut renderer);
-                thread::sleep(Duration::from_millis(3000));
-                flappy.restart();
-                pipes = Pipes::new(&mut renderer);
-            }
-
-            renderer.present();
-        }
+        renderer.present();
     };
 
     #[cfg(target_os = "emscripten")]

@@ -2,11 +2,14 @@ extern crate sdl2;
 
 use std::path::Path;
 use std::vec::Vec;
+use std::fmt;
 
 use sdl2::rect::Rect;
 use sdl2::render::Renderer;
 use sdl2::render::Texture;
 use sdl2::image::LoadTexture;
+use sdl2::event::Event;
+use sdl2::keyboard::Keycode;
 
 use pipes::Pipe;
 use display::Displayable;
@@ -27,8 +30,14 @@ pub struct Bird {
     textures: Vec<Texture>,
 }
 
+impl fmt::Debug for Bird {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "This is a bird!")
+    }
+}
+
 impl Bird {
-    pub fn new(renderer: &mut Renderer) -> Bird {
+    pub fn new(renderer: &Renderer) -> Bird {
         // Must keep the names around as owned strings.
         let mut frame_names: Vec<String> = Vec::new();
         let mut frame_textures: Vec<Texture> = Vec::new();
@@ -92,6 +101,16 @@ impl Bird {
 }
 
 impl Displayable for Bird {
+    fn on_key_down(&mut self, event: &Event) {
+        match event {
+            &Event::KeyDown { keycode: Some(Keycode::Space), .. } => {
+                self.jump();
+                //particles.reset(flappy.x, flappy.y);
+            }
+            _ => {}
+        }
+    }
+
     fn update(&mut self) {
         self.time += 1;
         self.y -= self.speed as i32;

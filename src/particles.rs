@@ -10,6 +10,9 @@ use sdl2::render::Renderer;
 use sdl2::render::Texture;
 use sdl2::render::BlendMode;
 use sdl2::image::LoadTexture;
+use sdl2::event::Event;
+use sdl2::keyboard::Keycode;
+
 
 use display::Displayable;
 
@@ -22,11 +25,13 @@ pub struct Particles {
 }
 
 impl Particles {
-    pub fn new(renderer: &mut Renderer) -> Particles {
+    pub fn new(renderer: &Renderer) -> Particles {
         let path = Path::new("res/imgs/star.png");
         let mut texture = renderer.load_texture(path).unwrap();
         texture.set_blend_mode(BlendMode::Add);
 
+        // Texture is shared between this class and each particle so we don't want to have to
+        // move or deep clone() it.
         let rc_texture = Rc::new(texture);
 
         let mut pieces: Vec<StarParticle> = Vec::new();
@@ -51,6 +56,15 @@ impl Particles {
 }
 
 impl Displayable for Particles {
+    fn on_key_down(&mut self, event: &Event) {
+        match event {
+            &Event::KeyDown { keycode: Some(Keycode::Space), .. } => {
+                //self.reset();
+            }
+            _ => {}
+        }
+    }
+
     fn update(&mut self) {
         for p in &mut self.particles {
             p.update();
