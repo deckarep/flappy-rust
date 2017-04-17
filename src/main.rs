@@ -64,18 +64,13 @@ pub fn main() {
 
     // draw_title: Flappy Rust
     draw_title("Flappy Bird", &mut renderer);
+    let _ = music.play(1);
 
     // sleep 1 second
     thread::sleep(Duration::from_millis(3000));
 
     // Testing a bird
     let mut scene = Scene::new(&mut renderer);
-    //scene.add_child(Box::new(Pipes::new(&mut renderer)));
-    //scene.add_child(Box::new(Particles::new(&mut renderer)));
-
-    let _ = music.play(1);
-
-    let mut game_paused = false;
 
     let mut main_loop = || {
         for event in event_pump.poll_iter() {
@@ -112,20 +107,8 @@ pub fn main() {
         scene.update();
         scene.paint(&mut renderer);
 
-        // // Update and paint pipes
-        // pipes.update();
-        // pipes.paint(&mut renderer);
-
-        // // Update paint bird.
-        // flappy.update();
-        // flappy.paint(&mut renderer);
-
         // // Check for collisions on bird.
         // pipes.touch(&mut flappy);
-
-        // // Update particles
-        // particles.update();
-        // particles.paint(&mut renderer);
 
         // if flappy.is_dead() {
         //     draw_title("Game Over", &mut renderer);

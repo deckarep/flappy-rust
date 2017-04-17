@@ -22,6 +22,9 @@ pub struct Scene {
     paused: bool,
 
     // Objects.
+    // https://www.reddit.com/r/rust/comments/4ij34q/how_to_use_rcrefcellt_properly/
+    // I did this because I want to share assets to control individually within the scene.
+    // And additionally control generically as Displayable objects.
     flappy: Rc<RefCell<Bird>>,
     pipes: Rc<RefCell<Pipes>>,
     particles: Rc<RefCell<Particles>>,

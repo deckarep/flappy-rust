@@ -30,12 +30,6 @@ pub struct Bird {
     textures: Vec<Texture>,
 }
 
-impl fmt::Debug for Bird {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "This is a bird!")
-    }
-}
-
 impl Bird {
     pub fn new(renderer: &Renderer) -> Bird {
         // Must keep the names around as owned strings.
