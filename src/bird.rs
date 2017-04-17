@@ -2,7 +2,6 @@ extern crate sdl2;
 
 use std::path::Path;
 use std::vec::Vec;
-use std::fmt;
 
 use sdl2::rect::Rect;
 use sdl2::render::Renderer;
@@ -13,11 +12,13 @@ use sdl2::keyboard::Keycode;
 
 use pipes::Pipe;
 use display::Displayable;
+use particles::Particles;
 
 const GRAVITY: f64 = 0.2;
 const JUMPSPEED: f64 = 8.0;
 
 pub struct Bird {
+    particles: Particles,
     time: i32,
     pub x: i32,
     pub y: i32,
@@ -44,6 +45,7 @@ impl Bird {
         }
 
         Bird {
+            particles: Particles::new(renderer),
             time: 0,
             x: 30,
             y: 300,
@@ -98,7 +100,7 @@ impl Displayable for Bird {
         match event {
             &Event::KeyDown { keycode: Some(Keycode::Space), .. } => {
                 self.jump();
-                //particles.reset(flappy.x, flappy.y);
+                self.particles.reset(self.x, self.y);
             }
             _ => {}
         }
@@ -111,6 +113,8 @@ impl Displayable for Bird {
             self.dead = true;
         }
         self.speed += GRAVITY;
+
+        self.particles.update();
     }
 
     fn paint(&self, renderer: &mut Renderer) {
@@ -134,5 +138,7 @@ impl Displayable for Bird {
                      false,
                      false)
             .expect("Bird should have rendered.");
+
+        self.particles.paint(renderer);
     }
 }

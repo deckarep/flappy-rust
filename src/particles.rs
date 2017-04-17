@@ -34,14 +34,9 @@ impl Particles {
         // move or deep clone() it.
         let rc_texture = Rc::new(texture);
 
-        let mut pieces: Vec<StarParticle> = Vec::new();
-        for _ in 1..NUM_PARTICLES {
-            pieces.push(StarParticle::new(rc_texture.clone(), 30, 300))
-        }
-
         Particles {
             texture: rc_texture,
-            particles: pieces,
+            particles: Vec::new(),
         }
     }
 

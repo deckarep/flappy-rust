@@ -14,7 +14,7 @@ use sdl2::keyboard::Keycode;
 use display::Displayable;
 use bird::Bird;
 use pipes::Pipes;
-use particles::Particles;
+
 
 
 pub struct Scene {
@@ -27,7 +27,7 @@ pub struct Scene {
     // And additionally control generically as Displayable objects.
     flappy: Rc<RefCell<Bird>>,
     pipes: Rc<RefCell<Pipes>>,
-    particles: Rc<RefCell<Particles>>,
+    //particles: Rc<RefCell<Particles>>,
 
     // Generic.
     children: Vec<Rc<RefCell<Displayable>>>,
@@ -47,18 +47,14 @@ impl Scene {
     pub fn new(renderer: &Renderer) -> Scene {
         let flappy = Rc::new(RefCell::new(Bird::new(renderer)));
         let pipes = Rc::new(RefCell::new(Pipes::new(renderer)));
-        let particles = Rc::new(RefCell::new(Particles::new(renderer)));
-
 
         let mut children: Vec<Rc<RefCell<Displayable>>> = Vec::new();
         children.push(flappy.clone());
         children.push(pipes.clone());
-        children.push(particles.clone());
 
         let s = Scene {
             flappy: flappy.clone(),
             pipes: pipes.clone(),
-            particles: particles.clone(),
             paused: false,
             children: children,
             layer0: renderer

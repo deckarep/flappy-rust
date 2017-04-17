@@ -1,7 +1,5 @@
 extern crate sdl2;
 
-use std::fmt;
-
 use sdl2::render::Renderer;
 use sdl2::event::Event;
 
@@ -20,10 +18,4 @@ pub trait Displayable {
 
     // on_key_up handles a key up event with a default implmentation of noop.
     fn on_key_up(&mut self, event: &Event) {}
-}
-
-impl fmt::Debug for Displayable {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "This is a bird!")
-    }
 }
