@@ -7,6 +7,8 @@ use sdl2::event::Event;
 
 // Displayable is any type that be updated and rendered to the screen.
 pub trait Displayable {
+    // In the future, could add set_alpha, set_rotation, set_visible, set_blend, etc.
+
     // update handles only updating the internal state of a Displayable object.
     fn update(&mut self);
 

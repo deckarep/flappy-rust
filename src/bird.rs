@@ -72,7 +72,6 @@ impl Bird {
     }
 
     pub fn touch(&mut self, p: &Pipe) {
-
         if p.x > self.x + self.w {
             // too far right
             return;
