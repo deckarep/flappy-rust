@@ -81,20 +81,12 @@ pub fn main() {
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     process::exit(0);
                 }
-                // Forwards key events to the scene manager.
                 Event::KeyDown { .. } => {
                     scene.on_key_down(&event);
                 }
                 Event::KeyUp { .. } => {
                     scene.on_key_up(&event);
                 }
-                // Event::KeyDown { keycode: Some(Keycode::P), .. } => {
-                //     game_paused = !game_paused;
-                // }
-                // Event::KeyDown { keycode: Some(Keycode::Space), .. } => {
-                //     //flappy.jump();
-                //     //particles.reset(flappy.x, flappy.y);
-                // }
                 _ => {}
             }
         }
@@ -107,15 +99,14 @@ pub fn main() {
         scene.update();
         scene.paint(&mut renderer);
 
-        // // Check for collisions on bird.
-        // pipes.touch(&mut flappy);
 
-        // if flappy.is_dead() {
-        //     draw_title("Game Over", &mut renderer);
-        //     thread::sleep(Duration::from_millis(3000));
-        //     flappy.restart();
-        //     pipes = Pipes::new(&mut renderer);
-        // }
+        if scene.is_game_over() {
+            draw_title("Game Over", &mut renderer);
+            thread::sleep(Duration::from_millis(3000));
+            scene.restart();
+            // flappy.restart();
+            // pipes = Pipes::new(&mut renderer);
+        }
 
         renderer.present();
     };

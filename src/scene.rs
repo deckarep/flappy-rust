@@ -20,6 +20,7 @@ use pipes::Pipes;
 pub struct Scene {
     // Internal state.
     paused: bool,
+    game_over: bool,
 
     // Objects.
     // https://www.reddit.com/r/rust/comments/4ij34q/how_to_use_rcrefcellt_properly/
@@ -27,7 +28,6 @@ pub struct Scene {
     // And additionally control generically as Displayable objects.
     flappy: Rc<RefCell<Bird>>,
     pipes: Rc<RefCell<Pipes>>,
-    //particles: Rc<RefCell<Particles>>,
 
     // Generic.
     children: Vec<Rc<RefCell<Displayable>>>,
@@ -56,6 +56,7 @@ impl Scene {
             flappy: flappy.clone(),
             pipes: pipes.clone(),
             paused: false,
+            game_over: false,
             children: children,
             layer0: renderer
                 .load_texture(Path::new("res/imgs/layer_01_1920 x 1080.png"))
@@ -85,7 +86,19 @@ impl Scene {
         self.children.push(child);
     }
 
-    pub fn restart(&mut self) {}
+    pub fn restart(&mut self) {
+        // Reset all assets.
+        self.flappy.borrow_mut().restart();
+        self.pipes.borrow_mut().restart();
+
+
+        // Finally reset the state of the scene.
+        self.game_over = false;
+    }
+
+    pub fn is_game_over(&self) -> bool {
+        self.game_over
+    }
 }
 
 impl Displayable for Scene {
@@ -103,16 +116,25 @@ impl Displayable for Scene {
         }
     }
 
-    fn on_key_up(&mut self, event: &Event) {
-        // TODO: allow cancel propagating events based on logic in parent.
-        // for child in &mut self.children {
-        //     child.on_key_up(event);
-        // }
-    }
-
     fn update(&mut self) {
         if self.paused {
             return;
+        }
+
+        //TODO: allow cancel propagating events based on logic in parent.
+        for child in &self.children {
+            child.borrow_mut().update();
+        }
+
+        // Introduce a scope to puposefully limit the scope of the borrows.
+        {
+            let ref mut bird = *self.flappy.borrow_mut();
+            self.pipes.borrow().touch(bird);
+
+            if bird.is_dead() {
+                // TODO:
+                self.game_over = true;
+            }
         }
 
         // Nothing to do for the background at this point sucka.
@@ -134,11 +156,6 @@ impl Displayable for Scene {
         }
         if self.layer4_x2 < -800 {
             self.layer4_x2 = self.layer4_x + 800 - 2;
-        }
-
-        //TODO: allow cancel propagating events based on logic in parent.
-        for child in &self.children {
-            child.borrow_mut().update();
         }
     }
 

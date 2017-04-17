@@ -33,10 +33,10 @@ impl Pipes {
     }
 
     pub fn restart(&mut self) {
-        self.pipes = Vec::new();
+        self.pipes = vec![Pipe::new()];
     }
 
-    pub fn touch(&mut self, bird: &mut Bird) {
+    pub fn touch(&self, bird: &mut Bird) {
         for p in &self.pipes {
             p.touch(bird);
         }

@@ -14,8 +14,8 @@ pub trait Displayable {
     fn paint(&self, renderer: &mut Renderer);
 
     // on_key_down handles a key down event with a default implmentation of noop.
-    fn on_key_down(&mut self, event: &Event) {}
+    fn on_key_down(&mut self, _event: &Event) {}
 
     // on_key_up handles a key up event with a default implmentation of noop.
-    fn on_key_up(&mut self, event: &Event) {}
+    fn on_key_up(&mut self, _event: &Event) {}
 }
