@@ -110,6 +110,10 @@ impl Displayable for Scene {
             _ => {}
         }
 
+        if self.paused{
+            return;
+        }
+
         //TODO: allow cancel propagating events based on logic in parent.
         for child in &self.children {
             child.borrow_mut().on_key_down(event);
