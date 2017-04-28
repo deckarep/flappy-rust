@@ -102,6 +102,7 @@ pub fn main() {
 
         if scene.is_game_over() {
             draw_title("Game Over", &mut renderer);
+            // TODO: do this based on time elapsed rather than sleep.
             thread::sleep(Duration::from_millis(3000));
             scene.restart();
             // flappy.restart();
